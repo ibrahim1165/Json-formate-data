@@ -1,31 +1,78 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import "./json.css"
 
 const Json = () => {
-    const inputArea = document?.querySelector(".large-area--input");
-    const outputArea = document.querySelector(".large-area--output");
-
+    const [copiedText, setCopiedText] = useState(null);
+    const [disabled, setDisabled] = useState(true);
+    const [error, setErr] = useState(null);
+    const previousInputValue = useRef('');
+    const outputInputValue = useRef('');
     const handleClick = () => {
-        const formatted = JSON.stringify(JSON.parse(inputArea.value), null, 4);
-        outputArea.value = formatted;
-    }
+        try {
+            const formatted = JSON.stringify(
+                JSON.parse(previousInputValue.current.value),
+                null,
+                1
+            );
+            setCopiedText(copiedText);
+            setDisabled(false);
+            outputInputValue.current.value = formatted;
+
+        } catch (e) {
+            setErr(e.message);
+        }
+    };
     const handleClear = () => {
-        outputArea.value="";
-        inputArea.value="";
+        outputInputValue.current.value = "";
+        previousInputValue.current.value = "";
+        setDisabled(true);
+    };
+
+    const handleCopyFormatting = (e) => {
+        console.log('copied');
+        outputInputValue.current.select();
+        document.execCommand('copy');
+        e.target.focus();
     }
+
+    if (error) {
+        return  <h4> {error} </h4>
+    }
+
 
 
     return (
         <div class="container">
-            <textarea class="large-area large-area--input" placeholder="Enter your JSON here...">
-
+            <textarea
+                ref={previousInputValue}
+                class="large-area large-area--input"
+                placeholder="Enter your JSON here..."
+            >
             </textarea>
             <div class="controls">
-                <button onClick={handleClick} type="button" class="controls__button controls__button--format">Format</button>
+                <button
+                    onClick={handleClick}
+                    type="button"
+                    class="controls__button controls__button--format"
+                >
+                    Format
+                </button>
 
-                <button onClick={handleClear} type="button" class="controls__button controls__button--minify">Clear</button>
+                <button
+                    onClick={handleClear}
+                    type="button"
+                    class="controls__button controls__button--minify"
+                >
+                    Clear
+                </button>
+                <button disabled={disabled} className='controls__button' onClick={handleCopyFormatting}>Copy </button>
             </div>
-            <textarea class="large-area large-area--output" placeholder="Your JSON will appear here..." readOnly></textarea>
+            <textarea
+                ref={outputInputValue}
+                class="large-area large-area--output"
+                placeholder="Your JSON will appear here..."
+                readOnly
+            ></textarea>
         </div>
     )
 }

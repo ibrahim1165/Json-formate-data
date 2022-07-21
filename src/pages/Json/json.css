@@ -43,7 +43,7 @@ textarea {
 
 body {
     margin: 0;
-    background: #333333;
+    background: #333339;
   }
   
   .container {
@@ -87,7 +87,7 @@ body {
     border: none;
     outline: none;
     cursor: pointer;
-    background: #009578;
+    background: black;
     color: #ffffff;
     font-weight: bold;
     font-family: "Roboto";
@@ -95,5 +95,14 @@ body {
   
   .controls__button:active {
     background: #00705a;
+  }
+  button:disabled{
+    background-color: #aaaaaa;
+  }
+  @media screen and (max-width:720px){
+    .container{
+      display: grid;
+      grid-template-columns: 1fr;
+    }
   }
   
