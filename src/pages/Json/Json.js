@@ -1,4 +1,5 @@
 import React from 'react';
+import "./json.css"
 
 const Json = () => {
     return (
